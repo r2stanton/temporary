@@ -14,7 +14,7 @@ class Coords {
 
 public:
     Coords();
-    double x_, y_, z_, t_, xt_, yt_, zt_, tt_;
+    double x_, y_, z_, t_, xt_, yt_, zt_, tt_, phi;
     double vx_, vy_, vz_, vt_, vxt_, vyt_, vzt_, vtt_;
 
 };

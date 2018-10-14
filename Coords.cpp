@@ -15,4 +15,5 @@ Coords::Coords(double xi, double yi, double zi, double ti,
     vx_ = vxi;
     vy_ = vyi;
     vz_ = vzi;
+
 }
