@@ -12,25 +12,25 @@ double M;
 class Ray {
 public:
     Coords coords_;
-    void step(Ray ray);   /* I was not sure here if step would need to have both
-                            rays in it, I don't think so, because the trajectory
-                           of one does not depend on the trajectory of the other. */
-
+    // Maybe Coords temp; ? Depends on RK setup
+    void step(Ray ray);
     double M_ = 1.0;
     Ray();
-    double phifunc(Coords coords);
-    double goo(Coords coords);
-    double g11(Coords coords);
-    double g22(Coords coords);
-    double g33(Coords coords);
-    double vxdotfunc(Coords coords); // so I set them to double just incase
-    double vydotfunc(Coords coords);
-    double vzdotfunc(Coords coords);
-    double vtdotfunc(Coords coords);
+    double phifunc(Coords temp);
+    double goo(Coords temp);
+    double g11(Coords temp);
+    double g22(Coords temp);
+    double g33(Coords temp);
+    double vxdotfunc(Coords temp);
+    double vydotfunc(Coords temp);
+    double vzdotfunc(Coords temp);
+    double vtdotfunc(Coords temp);
     double lag(Coords coords);
-    double position(); /* Could make this append some values for positions to arrays
-                       for each coordinate, or could just do that in step */
-    double gooderiv(Coords coords, int dir);
+    double position();
+    double gooderiv(Coords temp, int dir);
+    double g11deriv(Coords temp, int dir);
+    double g22deriv(Coords temp, int dir);
+    double g33deriv(Coords temp, int dir);
 };
 
 
