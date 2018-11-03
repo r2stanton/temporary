@@ -3,4 +3,4 @@ project(lensing)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(lensing main.cpp Ray.cpp Ray.h Coords.cpp Coords.h)
+add_executable(lensing main.cpp Ray.cpp Ray.h Coords.cpp Coords.h derivs.cpp)

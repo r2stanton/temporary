@@ -6,11 +6,13 @@
 #include <iostream>
 #include "Ray.h"
 #include "Coords.h"
+#include "derivs.cpp"
 
 using namespace std;
 
 Ray::Ray() {
 
+    // use to set the initial values
     coords_.x_ = 10.0;
     coords_.y_ = 0.0;
     coords_.z_ = 0.0;
@@ -18,7 +20,21 @@ Ray::Ray() {
     coords_.vx_ = 0.1;
     coords_.vy_ = 0.0;
     coords_.vz_ = sqrt(1.0 - coords_.vx_*coords_.vx_ - coords_.vy_*coords_.vy_);
+    coords_.vt_ = 1.0;
+}
 
+Ray::~Ray() {
+    // basic empty destructor
+}
+
+void Ray::runray() {
+    double h = 0.005;
+    for(int i=0; i<100; i++){
+        step(h);
+        if(i%5 == 0){
+            cout << i <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
+        }
+    }
 }
 
 void Ray::step(double h){
@@ -27,18 +43,6 @@ void Ray::step(double h){
             k3x, k3y, k3z, k3t, k3vx, k3vy, k3vz, k3vt,
             k4x, k4y, k4z, k4t, k4vx, k4vy, k4vz, k4vt;
 
-// For RK if use temps
-            // Can run 2 rays at once, Coords temp1 Coords temp2 = Ray1.coords. ... ,  Ray2.coords. ...
-            // Bad thing is it would look very strange (Ray.step(Coords temp1, Coords temp2) referring to 2 different rays, being called by one ray
-            // and might have problems because step is in Ray, would likely want to remove step from Ray entirely
-
-// For RK if use coords, it would make most sense to *only use them for the initial/final setting of Coord temp object,
-            // So: temp. ... = coords. ... at beginning -> RK -> coords. ... = temp. ...
-            // This would probably work well, and we'd get rid of coords_.(t, x, y, z)t's since temp object would handle that
-// I think this is better, but I could be missing something with what you did with temps
-
-// Basically if we don't get rid of one or the other, there will be a lot of unnecessary setting of either
-            // coords_.(t, x, y, z)t = temp. ... or vice versa
 
     coords_.tt_ = coords_.t_;
     coords_.xt_ = coords_.x_;
@@ -53,30 +57,89 @@ void Ray::step(double h){
     k1x = h * coords_.vxt_;
     k1y = h * coords_.vyt_;
     k1z = h * coords_.vzt_;
-
-
     k1vt = h * vtdotfunc();
     k1vx = h * vxdotfunc();
     k1vy = h * vydotfunc();
     k1vz = h * vzdotfunc();
 
 
+    coords_.tt_ = coords_.t_   + k1t/2.0;
+    coords_.xt_ = coords_.x_   + k1x/2.0;
+    coords_.yt_ = coords_.y_   + k1y/2.0;
+    coords_.zt_ = coords_.z_   + k1z/2.0;
+    coords_.vtt_ = coords_.vt_ + k1vt/2.0;
+    coords_.vxt_ = coords_.vx_ + k1vx/2.0;
+    coords_.vyt_ = coords_.vy_ + k1vy/2.0;
+    coords_.vzt_ = coords_.vz_ + k1vz/2.0;
+
+    k2t = h * coords_.vtt_;
+    k2x = h * coords_.vxt_;
+    k2y = h * coords_.vyt_;
+    k2z = h * coords_.vzt_;
+    k2vt = h * vtdotfunc();
+    k2vx = h * vxdotfunc();
+    k2vy = h * vydotfunc();
+    k2vz = h * vzdotfunc();
 
 
+    coords_.tt_ = coords_.t_   + k2t/2.0;
+    coords_.xt_ = coords_.x_   + k2x/2.0;
+    coords_.yt_ = coords_.y_   + k2y/2.0;
+    coords_.zt_ = coords_.z_   + k2z/2.0;
+    coords_.vtt_ = coords_.vt_ + k2vt/2.0;
+    coords_.vxt_ = coords_.vx_ + k2vx/2.0;
+    coords_.vyt_ = coords_.vy_ + k2vy/2.0;
+    coords_.vzt_ = coords_.vz_ + k2vz/2.0;
+
+    k3t = h * coords_.vtt_;
+    k3x = h * coords_.vxt_;
+    k3y = h * coords_.vyt_;
+    k3z = h * coords_.vzt_;
+    k3vt = h * vtdotfunc();
+    k3vx = h * vxdotfunc();
+    k3vy = h * vydotfunc();
+    k3vz = h * vzdotfunc();
+
+    coords_.tt_ = coords_.t_   + k3t;
+    coords_.xt_ = coords_.x_   + k3x;
+    coords_.yt_ = coords_.y_   + k3y;
+    coords_.zt_ = coords_.z_   + k3z;
+    coords_.vtt_ = coords_.vt_ + k3vt;
+    coords_.vxt_ = coords_.vx_ + k3vx;
+    coords_.vyt_ = coords_.vy_ + k3vy;
+    coords_.vzt_ = coords_.vz_ + k3vz;
+
+    k4t = h * coords_.vtt_;
+    k4x = h * coords_.vxt_;
+    k4y = h * coords_.vyt_;
+    k4z = h * coords_.vzt_;
+    k4vt = h * vtdotfunc();
+    k4vx = h * vxdotfunc();
+    k4vy = h * vydotfunc();
+    k4vz = h * vzdotfunc();
+
+    coords_.t_ = coords_.t_ + (k1t + 2.0*k2t + 2.0*k3t + k4t)/6.0;
+    coords_.x_ = coords_.x_ + (k1x + 2.0*k2x + 2.0*k3x + k4x)/6.0;
+    coords_.y_ = coords_.y_ + (k1y + 2.0*k2y + 2.0*k3y + k4y)/6.0;
+    coords_.z_ = coords_.z_ + (k1z + 2.0*k2z + 2.0*k3z + k4z)/6.0;
+    coords_.vt_ = coords_.vt_ + (k1vt + 2.0*k2vt + 2.0*k3vt + k4vt)/6.0;
+    coords_.vx_ = coords_.vx_ + (k1vx + 2.0*k2vx + 2.0*k3vx + k4vx)/6.0;
+    coords_.vy_ = coords_.vy_ + (k1vy + 2.0*k2vy + 2.0*k3vy + k4vy)/6.0;
+    coords_.vz_ = coords_.vz_ + (k1vz + 2.0*k2vz + 2.0*k3vz + k4vz)/6.0;
 
 }
 
 
 
 double  Ray::phifunc(Coords temp){
-    return (-1* M)/(pow(pow(temp.xt_, 2) + pow(temp.yt_, 2) + pow(temp.zt_, 2),.5));
+    return (-1* M_)/(pow(pow(temp.xt_, 2) + pow(temp.yt_, 2) + pow(temp.zt_, 2),.5));
 }
 
 double Ray::goo(Coords temp){
     return(-1 -2*phifunc(temp));
 }
 double Ray::g11(Coords temp){
-    return(1-2*phifunc(temp));
+    return(1-2*phifunc(temp)); // NOTE TO CHECK - WE HAVE A SIGN PROBLEM HERE NOT ALL THESE ARE CONSISTENT
 }
 double Ray::g22(Coords temp){
     return(-1 -2*phifunc(temp));
@@ -85,51 +148,107 @@ double Ray::g33(Coords temp){
     return(-1 -2*phifunc(temp));
 }
 
+double Ray::vtdotfunc(){
+
+    Coords temp;
+    temp.tt_ = coords_.tt_;
+    temp.xt_ = coords_.xt_;
+    temp.yt_ = coords_.yt_;
+    temp.zt_ = coords_.zt_;
+
+    double dgoodt = gooderiv(temp, 0);
+    double dg11dt = g11deriv(temp, 0);
+    double dg22dt = g22deriv(temp, 0);
+    double dg33dt = g33deriv(temp, 0);
+    double dgoodx = gooderiv(temp, 1);
+    double dgoody = gooderiv(temp, 2);
+    double dgoodz = gooderiv(temp, 3);
 
 
-double Ray::vtdotfunc(Coords temp){   //right below is dL/dt
-    return (1.0/goo(temp) *(.5*(gooderiv(temp, 0) * pow(temp.vt_, 2)    +
-                                g11deriv(temp, 0) * pow(temp.vx_, 2)    +
-                                g22deriv(temp, 0) * pow(temp.vy_, 2)    +
-                                g33deriv(temp, 0) * pow(temp.vz_, 2)))  -
-            1/goo(temp)   *    (gooderiv(temp, 0) * temp.vt_ * temp.vt_ +
-                                gooderiv(temp, 1) * temp.vt_ * temp.vx_ +
-                                gooderiv(temp, 2) * temp.vt_ * temp.vy_ +
-                                gooderiv(temp, 3) * temp.vt_ * temp.vz_));
+    return 1.0/goo(temp) * (.5*(dgoodt * pow(coords_.vtt_, 2.0) + dg11dt * pow(coords_.vxt_, 2) + dg22dt * pow(coords_.vyt_, 2)
+            + dg33dt * pow(coords_.vzt_, 2)))  - 1/goo(temp)*(  dgoodt*coords_.vtt_*coords_.vtt_
+            + dgoodx*coords_.vtt_*coords_.vxt_ + dgoody*coords_.vtt_*coords_.vyt_
+            + dgoodz*coords_.vtt_*coords_.vzt_);
 }
 
-double Ray::vxdotfunc(Coords temp){   //right below is dL/dt
-    return (1.0/g11(temp) *(.5*(gooderiv(temp, 1) * pow(temp.vt_, 2)    +
-                                g11deriv(temp, 1) * pow(temp.vx_, 2)    +
-                                g22deriv(temp, 1) * pow(temp.vy_, 2)    +
-                                g33deriv(temp, 1) * pow(temp.vz_, 2)))  -
-            1/g11(temp)   *    (g11deriv(temp, 0) * temp.vx_ * temp.vt_ +
-                                g11deriv(temp, 1) * temp.vx_ * temp.vx_ +
-                                g11deriv(temp, 2) * temp.vx_ * temp.vy_ +
-                                g11deriv(temp, 3) * temp.vx_ * temp.vz_));
+double Ray::vxdotfunc(){
+
+    Coords temp;
+    temp.tt_ = coords_.tt_;
+    temp.xt_ = coords_.xt_;
+    temp.yt_ = coords_.yt_;
+    temp.zt_ = coords_.zt_;
+
+
+    double dgoodx = gooderiv(temp, 1);
+    double dg11dx = g11deriv(temp, 1);
+    double dg22dx = g22deriv(temp, 1);
+    double dg33dx = g33deriv(temp, 1);
+    double dg11dt = g11deriv(temp, 0);
+    double dg11dy = g11deriv(temp, 2);
+    double dg11dz = g11deriv(temp, 3);
+
+
+    return 1.0/g11(temp) * (.5*(dgoodx * pow(coords_.vtt_, 2.0) + dg11dx * pow(coords_.vxt_, 2) + dg22dx * pow(coords_.vyt_, 2)
+            + dg33dx * pow(coords_.vzt_, 2)))
+            - 1/g11(temp)*(  dg11dt*coords_.vxt_*coords_.vtt_  + dg11dx*coords_.vxt_*coords_.vxt_
+                    + dg11dy*coords_.vxt_*coords_.vyt_  + dg11dz*coords_.vxt_*coords_.vzt_);
+
+
 }
 
-double Ray::vtdotfunc(Coords temp){   //right below is dL/dt
-    return (1.0/g22(temp) *(.5*(gooderiv(temp, 2) * pow(temp.vt_, 2)    +
-                                g11deriv(temp, 2) * pow(temp.vx_, 2)    +
-                                g22deriv(temp, 2) * pow(temp.vy_, 2)    +
-                                g33deriv(temp, 2) * pow(temp.vz_, 2)))  -
-            1/g22(temp)   *    (g22deriv(temp, 0) * temp.vy_ * temp.vt_ +
-                                g22deriv(temp, 1) * temp.vy_ * temp.vx_ +
-                                g22deriv(temp, 2) * temp.vy_ * temp.vy_ +
-                                g22deriv(temp, 3) * temp.vy_ * temp.vz_));
+double Ray::vydotfunc(){
+
+    Coords temp;
+    temp.tt_ = coords_.tt_;
+    temp.xt_ = coords_.xt_;
+    temp.yt_ = coords_.yt_;
+    temp.zt_ = coords_.zt_;
+
+
+    double dgoody = gooderiv(temp, 2);
+    double dg11dy = g11deriv(temp, 2);
+    double dg22dy = g22deriv(temp, 2);
+    double dg33dy = g33deriv(temp, 2);
+    double dg22dt = g22deriv(temp, 0);
+    double dg22dx = g22deriv(temp, 1);
+    double dg22dz = g22deriv(temp, 3);
+
+
+    return 1.0/g22(temp) * (.5*(dgoody * pow(coords_.vtt_, 2.0) + dg11dy * pow(coords_.vxt_, 2) + dg22dy * pow(coords_.vyt_, 2)
+                                + dg33dy * pow(coords_.vzt_, 2)))
+           - 1/g22(temp)*(  dg22dt*coords_.vyt_*coords_.vtt_  + dg22dx*coords_.vyt_*coords_.vxt_
+                            + dg22dy*coords_.vyt_*coords_.vyt_  + dg22dz*coords_.vyt_*coords_.vzt_);
+
+
 }
 
-double Ray::vtdotfunc(Coords temp){   //right below is dL/dt
-    return (1.0/g33(temp) *(.5*(gooderiv(temp, 3) * pow(temp.vt_, 2)    +
-                                g11deriv(temp, 3) * pow(temp.vx_, 2)    +
-                                g22deriv(temp, 3) * pow(temp.vy_, 2)    +
-                                g33deriv(temp, 3) * pow(temp.vz_, 2)))  -
-            1/g33(temp)   *    (g33deriv(temp, 0) * temp.vz_ * temp.vt_ +
-                                g33deriv(temp, 1) * temp.vz_ * temp.vx_ +
-                                g33deriv(temp, 2) * temp.vz_ * temp.vy_ +
-                                g33deriv(temp, 3) * temp.vz_ * temp.vz_));
+double Ray::vzdotfunc(){
+
+    Coords temp;
+    temp.tt_ = coords_.tt_;
+    temp.xt_ = coords_.xt_;
+    temp.yt_ = coords_.yt_;
+    temp.zt_ = coords_.zt_;
+
+
+    double dgoodz = gooderiv(temp, 3);
+    double dg11dz = g11deriv(temp, 3);
+    double dg22dz = g22deriv(temp, 3);
+    double dg33dz = g33deriv(temp, 3);
+    double dg33dt = g33deriv(temp, 0);
+    double dg33dx = g33deriv(temp, 1);
+    double dg33dy = g33deriv(temp, 2);
+
+
+    return 1.0/g33(temp) * (.5*(dgoodz * pow(coords_.vtt_, 2.0) + dg11dz * pow(coords_.vxt_, 2) + dg22dz * pow(coords_.vyt_, 2)
+                                + dg33dz * pow(coords_.vzt_, 2)))
+           - 1/g33(temp)*(  dg33dt*coords_.vzt_*coords_.vtt_  + dg33dx*coords_.vzt_*coords_.vxt_
+                            + dg33dy*coords_.vzt_*coords_.vyt_  + dg33dz*coords_.vzt_*coords_.vzt_);
+
+
 }
+
 
 double Ray::gooderiv(Coords temp, int dir) {
 
@@ -141,6 +260,7 @@ double Ray::gooderiv(Coords temp, int dir) {
         plus = goo(temp);
         temp.tt_ = val - delta;
         minus = goo(temp);
+
     }
     else if(dir == 1){
         delta = temp.xt_ / 100.0;
@@ -170,7 +290,6 @@ double Ray::gooderiv(Coords temp, int dir) {
     }
     else{
         cout << "bad integer in gooderiv" << endl;
-        break;
     }
     return (plus - minus)/2.0/delta;
 }
@@ -213,8 +332,7 @@ double Ray::g11deriv(Coords temp, int dir) {
         minus = g11(temp);
     }
     else{
-        cout << "bad integer in g11deriv" << endl;
-        break;
+        cout << "bad integer in gooderiv" << endl;
     }
     return (plus - minus)/2.0/delta;
 }
@@ -257,8 +375,7 @@ double Ray::g22deriv(Coords temp, int dir) {
         minus = g22(temp);
     }
     else{
-        cout << "bad integer in g22deriv" << endl;
-        break;
+        cout << "bad integer in gooderiv" << endl;
     }
     return (plus - minus)/2.0/delta;
 }
@@ -301,9 +418,7 @@ double Ray::g33deriv(Coords temp, int dir) {
         minus = g33(temp);
     }
     else{
-        cout << "bad integer in g33deriv" << endl;
-        break;
+        cout << "bad integer in gooderiv" << endl;
     }
     return (plus - minus)/2.0/delta;
 }
-

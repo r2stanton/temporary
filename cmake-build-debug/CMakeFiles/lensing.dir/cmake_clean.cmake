@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/lensing.dir/main.cpp.o"
   "CMakeFiles/lensing.dir/Ray.cpp.o"
   "CMakeFiles/lensing.dir/Coords.cpp.o"
+  "CMakeFiles/lensing.dir/derivs.cpp.o"
   "lensing.pdb"
   "lensing"
 )

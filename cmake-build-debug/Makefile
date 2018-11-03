@@ -177,6 +177,33 @@ Ray.cpp.s:
 	$(MAKE) -f CMakeFiles/lensing.dir/build.make CMakeFiles/lensing.dir/Ray.cpp.s
 .PHONY : Ray.cpp.s
 
+derivs.o: derivs.cpp.o
+
+.PHONY : derivs.o
+
+# target to build an object file
+derivs.cpp.o:
+	$(MAKE) -f CMakeFiles/lensing.dir/build.make CMakeFiles/lensing.dir/derivs.cpp.o
+.PHONY : derivs.cpp.o
+
+derivs.i: derivs.cpp.i
+
+.PHONY : derivs.i
+
+# target to preprocess a source file
+derivs.cpp.i:
+	$(MAKE) -f CMakeFiles/lensing.dir/build.make CMakeFiles/lensing.dir/derivs.cpp.i
+.PHONY : derivs.cpp.i
+
+derivs.s: derivs.cpp.s
+
+.PHONY : derivs.s
+
+# target to generate assembly for a file
+derivs.cpp.s:
+	$(MAKE) -f CMakeFiles/lensing.dir/build.make CMakeFiles/lensing.dir/derivs.cpp.s
+.PHONY : derivs.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -219,6 +246,9 @@ help:
 	@echo "... Ray.o"
 	@echo "... Ray.i"
 	@echo "... Ray.s"
+	@echo "... derivs.o"
+	@echo "... derivs.i"
+	@echo "... derivs.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/tpkling/repo/temporary/Coords.cpp" "/Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles/lensing.dir/Coords.cpp.o"
   "/Users/tpkling/repo/temporary/Ray.cpp" "/Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles/lensing.dir/Ray.cpp.o"
+  "/Users/tpkling/repo/temporary/derivs.cpp" "/Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles/lensing.dir/derivs.cpp.o"
   "/Users/tpkling/repo/temporary/main.cpp" "/Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles/lensing.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")

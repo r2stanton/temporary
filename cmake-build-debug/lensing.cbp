@@ -94,6 +94,9 @@
 		<Unit filename="/Users/tpkling/repo/temporary/Ray.h">
 			<Option target="lensing"/>
 		</Unit>
+		<Unit filename="/Users/tpkling/repo/temporary/derivs.cpp">
+			<Option target="lensing"/>
+		</Unit>
 		<Unit filename="/Users/tpkling/repo/temporary/main.cpp">
 			<Option target="lensing"/>
 		</Unit>
