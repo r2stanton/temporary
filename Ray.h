@@ -15,7 +15,7 @@ public:
 
     void step(double h);
     void runray();
-
+    double defdelta = .00001;
     double M_ = 1.0;
     Ray();
     ~Ray();

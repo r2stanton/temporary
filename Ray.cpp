@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <fstream>
 #include "Ray.h"
 #include "Coords.h"
 #include "derivs.cpp"
@@ -28,12 +29,16 @@ Ray::~Ray() {
 }
 
 void Ray::runray() {
+    //Commented lines will write to csv. Might be easier to compare the rays w/ a quicker language like python
+    //ofstream data;
+    //data.open("data.csv");
     double h = 0.005;
     for(int i=0; i<100; i++){
         step(h);
         if(i%5 == 0){
             cout << i <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
         }
+        //data << i << "," << coords_.t_ << "," << coords_.x_ << "," << coords_.y_ <<","<< coords_.z_<< endl;
     }
 }
 
@@ -139,13 +144,13 @@ double Ray::goo(Coords temp){
     return(-1 -2*phifunc(temp));
 }
 double Ray::g11(Coords temp){
-    return(1-2*phifunc(temp)); // NOTE TO CHECK - WE HAVE A SIGN PROBLEM HERE NOT ALL THESE ARE CONSISTENT
+    return(1-2*phifunc(temp)); // I'm almost sure that the bottom ones were supposed to have a positive 1, so I changed to that.
 }
 double Ray::g22(Coords temp){
-    return(-1 -2*phifunc(temp));
+    return(1 -2*phifunc(temp));
 }
 double Ray::g33(Coords temp){
-    return(-1 -2*phifunc(temp));
+    return(1 -2*phifunc(temp));
 }
 
 double Ray::vtdotfunc(){
@@ -255,6 +260,9 @@ double Ray::gooderiv(Coords temp, int dir) {
     double delta, plus, minus, val;
     if(dir ==0){
         delta = temp.tt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.tt_;
         temp.tt_ = val + delta;
         plus = goo(temp);
@@ -264,6 +272,9 @@ double Ray::gooderiv(Coords temp, int dir) {
     }
     else if(dir == 1){
         delta = temp.xt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.xt_;
         temp.xt_ = val + delta;
         plus = goo(temp);
@@ -273,6 +284,9 @@ double Ray::gooderiv(Coords temp, int dir) {
 
     else if(dir == 2){
         delta = temp.yt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.yt_;
         temp.yt_ = val + delta;
         plus = goo(temp);
@@ -282,6 +296,9 @@ double Ray::gooderiv(Coords temp, int dir) {
 
     else if(dir == 3){
         delta = temp.zt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.zt_;
         temp.zt_ = val + delta;
         plus = goo(temp);
@@ -299,6 +316,9 @@ double Ray::g11deriv(Coords temp, int dir) {
     double delta, plus, minus, val;
     if(dir ==0){
         delta = temp.tt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.tt_;
         temp.tt_ = val + delta;
         plus = g11(temp);
@@ -307,6 +327,9 @@ double Ray::g11deriv(Coords temp, int dir) {
     }
     else if(dir == 1){
         delta = temp.xt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.xt_;
         temp.xt_ = val + delta;
         plus = g11(temp);
@@ -316,6 +339,9 @@ double Ray::g11deriv(Coords temp, int dir) {
 
     else if(dir == 2){
         delta = temp.yt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.yt_;
         temp.yt_ = val + delta;
         plus = g11(temp);
@@ -325,6 +351,9 @@ double Ray::g11deriv(Coords temp, int dir) {
 
     else if(dir == 3){
         delta = temp.zt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.zt_;
         temp.zt_ = val + delta;
         plus = g11(temp);
@@ -342,6 +371,9 @@ double Ray::g22deriv(Coords temp, int dir) {
     double delta, plus, minus, val;
     if(dir ==0){
         delta = temp.tt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.tt_;
         temp.tt_ = val + delta;
         plus = g22(temp);
@@ -350,6 +382,9 @@ double Ray::g22deriv(Coords temp, int dir) {
     }
     else if(dir == 1){
         delta = temp.xt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.xt_;
         temp.xt_ = val + delta;
         plus = g22(temp);
@@ -359,6 +394,9 @@ double Ray::g22deriv(Coords temp, int dir) {
 
     else if(dir == 2){
         delta = temp.yt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.yt_;
         temp.yt_ = val + delta;
         plus = g22(temp);
@@ -368,6 +406,9 @@ double Ray::g22deriv(Coords temp, int dir) {
 
     else if(dir == 3){
         delta = temp.zt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.zt_;
         temp.zt_ = val + delta;
         plus = g22(temp);
@@ -385,6 +426,9 @@ double Ray::g33deriv(Coords temp, int dir) {
     double delta, plus, minus, val;
     if(dir ==0){
         delta = temp.tt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.tt_;
         temp.tt_ = val + delta;
         plus = g33(temp);
@@ -393,6 +437,9 @@ double Ray::g33deriv(Coords temp, int dir) {
     }
     else if(dir == 1){
         delta = temp.xt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.xt_;
         temp.xt_ = val + delta;
         plus = g33(temp);
@@ -402,6 +449,9 @@ double Ray::g33deriv(Coords temp, int dir) {
 
     else if(dir == 2){
         delta = temp.yt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.yt_;
         temp.yt_ = val + delta;
         plus = g33(temp);
@@ -411,6 +461,9 @@ double Ray::g33deriv(Coords temp, int dir) {
 
     else if(dir == 3){
         delta = temp.zt_ / 100.0;
+        if (delta == 0){
+            delta = defdelta;
+        }
         val = temp.zt_;
         temp.zt_ = val + delta;
         plus = g33(temp);
