@@ -65,39 +65,39 @@ CMAKE_SOURCE_DIR = /Users/tpkling/repo/temporary
 CMAKE_BINARY_DIR = /Users/tpkling/repo/temporary/cmake-build-debug
 
 #=============================================================================
-# Target rules for target CMakeFiles/lensing.dir
+# Target rules for target CMakeFiles/temporary.dir
 
 # All Build rule for target.
-CMakeFiles/lensing.dir/all:
-	$(MAKE) -f CMakeFiles/lensing.dir/build.make CMakeFiles/lensing.dir/depend
-	$(MAKE) -f CMakeFiles/lensing.dir/build.make CMakeFiles/lensing.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target lensing"
-.PHONY : CMakeFiles/lensing.dir/all
+CMakeFiles/temporary.dir/all:
+	$(MAKE) -f CMakeFiles/temporary.dir/build.make CMakeFiles/temporary.dir/depend
+	$(MAKE) -f CMakeFiles/temporary.dir/build.make CMakeFiles/temporary.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target temporary"
+.PHONY : CMakeFiles/temporary.dir/all
 
 # Include target in all.
-all: CMakeFiles/lensing.dir/all
+all: CMakeFiles/temporary.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/lensing.dir/rule: cmake_check_build_system
+CMakeFiles/temporary.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles 5
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/lensing.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/temporary.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/tpkling/repo/temporary/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/lensing.dir/rule
+.PHONY : CMakeFiles/temporary.dir/rule
 
 # Convenience name for target.
-lensing: CMakeFiles/lensing.dir/rule
+temporary: CMakeFiles/temporary.dir/rule
 
-.PHONY : lensing
-
-# clean rule for target.
-CMakeFiles/lensing.dir/clean:
-	$(MAKE) -f CMakeFiles/lensing.dir/build.make CMakeFiles/lensing.dir/clean
-.PHONY : CMakeFiles/lensing.dir/clean
+.PHONY : temporary
 
 # clean rule for target.
-clean: CMakeFiles/lensing.dir/clean
+CMakeFiles/temporary.dir/clean:
+	$(MAKE) -f CMakeFiles/temporary.dir/build.make CMakeFiles/temporary.dir/clean
+.PHONY : CMakeFiles/temporary.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/temporary.dir/clean
 
 .PHONY : clean
 

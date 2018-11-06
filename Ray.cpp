@@ -11,18 +11,34 @@
 
 using namespace std;
 
+
 Ray::Ray() {
 
     // use to set the initial values
-    coords_.x_ = 10.0;
+    coords_.x_ = 0.0;
     coords_.y_ = 0.0;
-    coords_.z_ = 0.0;
+    coords_.z_ = -10.0;
     coords_.t_ = 0.0;
-    coords_.vx_ = 0.1;
+    coords_.vx_ = 0.4;
     coords_.vy_ = 0.0;
     coords_.vz_ = sqrt(1.0 - coords_.vx_*coords_.vx_ - coords_.vy_*coords_.vy_);
     coords_.vt_ = 1.0;
 }
+
+
+Ray::Ray(double vxval) {
+
+    // use to set the initial values
+    coords_.x_ = 0.0;
+    coords_.y_ = 0.0;
+    coords_.z_ = -10.0;
+    coords_.t_ = 0.0;
+    coords_.vx_ = vxval;
+    coords_.vy_ = 0.0;
+    coords_.vz_ = sqrt(1.0 - coords_.vx_*coords_.vx_ - coords_.vy_*coords_.vy_);
+    coords_.vt_ = 1.0;
+}
+
 
 Ray::~Ray() {
     // basic empty destructor
@@ -33,13 +49,31 @@ void Ray::runray() {
     //ofstream data;
     //data.open("data.csv");
     double h = 0.005;
-    for(int i=0; i<100; i++){
+    for(int i=0; i<3000; i++){
         step(h);
-        if(i%5 == 0){
+        if(i%100 == 0){
             cout << i <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
         }
         //data << i << "," << coords_.t_ << "," << coords_.x_ << "," << coords_.y_ <<","<< coords_.z_<< endl;
     }
+}
+
+void Ray::runtoz(double zfin) {
+    double h = 0.005;
+    int runsteps = 0;
+    while(coords_.z_ < zfin){
+        step(h);
+        runsteps++;
+        if(runsteps%100 == 0){
+            cout << runsteps <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
+        }
+        if(runsteps > 1000){
+            cout<<"took too many steps"<<endl;
+            break;
+        }
+        //data << i << "," << coords_.t_ << "," << coords_.x_ << "," << coords_.y_ <<","<< coords_.z_<< endl;
+    }
+
 }
 
 void Ray::step(double h){
@@ -137,7 +171,7 @@ void Ray::step(double h){
 
 
 double  Ray::phifunc(Coords temp){
-    return (-1* M_)/(pow(pow(temp.xt_, 2) + pow(temp.yt_, 2) + pow(temp.zt_, 2),.5));
+    return (- M_)/(pow(pow(temp.xt_, 2) + pow(temp.yt_, 2) + pow(temp.zt_, 2),.5));
 }
 
 double Ray::goo(Coords temp){

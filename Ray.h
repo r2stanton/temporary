@@ -15,9 +15,12 @@ public:
 
     void step(double h);
     void runray();
+    void runtoz(double zfin);
+
     double defdelta = .00001;
-    double M_ = 1.0;
+    double M_ = 1.0;  // could replace with a true value 10^30 kg range
     Ray();
+    Ray(double vx);
     ~Ray();
 
     double phifunc(Coords temp);

@@ -142,7 +142,7 @@ CMAKE_OSX_DEPLOYMENT_TARGET:STRING=
 CMAKE_OSX_SYSROOT:STRING=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=lensing
+CMAKE_PROJECT_NAME:STATIC=temporary
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/ranlib
@@ -211,6 +211,12 @@ lensing_BINARY_DIR:STATIC=/Users/tpkling/repo/temporary/cmake-build-debug
 
 //Value Computed by CMake
 lensing_SOURCE_DIR:STATIC=/Users/tpkling/repo/temporary
+
+//Value Computed by CMake
+temporary_BINARY_DIR:STATIC=/Users/tpkling/repo/temporary/cmake-build-debug
+
+//Value Computed by CMake
+temporary_SOURCE_DIR:STATIC=/Users/tpkling/repo/temporary
 
 
 ########################

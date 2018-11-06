@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++  -g -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/temporary.dir/main.cpp.o CMakeFiles/temporary.dir/Ray.cpp.o CMakeFiles/temporary.dir/Coords.cpp.o CMakeFiles/temporary.dir/derivs.cpp.o  -o temporary 

@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/tpkling/repo/temporary/Coords.h
+
+/Users/tpkling/repo/temporary/Ray.cpp
+cmath
+-
+iostream
+-
+fstream
+-
+Ray.h
+/Users/tpkling/repo/temporary/Ray.h
+Coords.h
+/Users/tpkling/repo/temporary/Coords.h
+derivs.cpp
+/Users/tpkling/repo/temporary/derivs.cpp
+
+/Users/tpkling/repo/temporary/Ray.h
+Coords.h
+/Users/tpkling/repo/temporary/Coords.h
+derivs.cpp
+/Users/tpkling/repo/temporary/derivs.cpp
+
+/Users/tpkling/repo/temporary/derivs.cpp
+Ray.h
+/Users/tpkling/repo/temporary/Ray.h
+cmath
+-
+iostream
+-
+
