@@ -31,7 +31,7 @@ Ray::Ray(double vxval) {
     // use to set the initial values
     coords_.x_ = 0.0;
     coords_.y_ = 0.0;
-    coords_.z_ = -10.0;
+    coords_.z_ = -1e+7;  // seems right for 4 billion years and 10^12 solar masses
     coords_.t_ = 0.0;
     coords_.vx_ = vxval;
     coords_.vy_ = 0.0;
@@ -61,19 +61,35 @@ void Ray::runray() {
 void Ray::runtoz(double zfin) {
     double h = 0.005;
     int runsteps = 0;
+    ofstream fout;
+    fout.open("ray.csv", ios::app);
     while(coords_.z_ < zfin){
+        if(abs(coords_.z_)<1000.0){
+            h=0.1;
+        }
+        else{
+            h=100.0;
+        }
         step(h);
         runsteps++;
-        if(runsteps%100 == 0){
+        if(runsteps%1000 == 0){
             cout << runsteps <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
         }
-        if(runsteps > 1000){
+  //      if(runsteps%10 ==0){
+  //          fout<< coords_.x_ <<"," << coords_.z_<<endl;
+  //      }
+        if(runsteps > 1000000){
             cout<<"took too many steps"<<endl;
+            break;
+        }
+        if(pow(coords_.x_, 2) + pow(coords_.y_, 2) + pow(coords_.z_, 2) < 4*M_){
+            cout<<"got too close"<<endl;
             break;
         }
         //data << i << "," << coords_.t_ << "," << coords_.x_ << "," << coords_.y_ <<","<< coords_.z_<< endl;
     }
-
+    fout.close();
+    cout << runsteps <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
 }
 
 void Ray::step(double h){
