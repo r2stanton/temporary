@@ -26,15 +26,15 @@ Ray::Ray() {
 }
 
 
-Ray::Ray(double vxval) {
+Ray::Ray(double vxval, double vyval, double zval) {
 
     // use to set the initial values
     coords_.x_ = 0.0;
     coords_.y_ = 0.0;
-    coords_.z_ = -1e+7;  // seems right for 4 billion years and 10^12 solar masses
+    coords_.z_ = zval;  // seems right for 4 billion years and 10^12 solar masses
     coords_.t_ = 0.0;
     coords_.vx_ = vxval;
-    coords_.vy_ = 0.0;
+    coords_.vy_ = vyval;
     coords_.vz_ = sqrt(1.0 - coords_.vx_*coords_.vx_ - coords_.vy_*coords_.vy_);
     coords_.vt_ = 1.0;
 }
@@ -58,36 +58,49 @@ void Ray::runray() {
     }
 }
 
-void Ray::runtoz(double zfin) {
+void Ray::runtoz(double zfin, double xaim, double yaim) {
     double h = 0.005;
     int runsteps = 0;
     ofstream fout;
-    fout.open("ray.csv", ios::app);
+    fout.open("DVxVyfor3DnewBy5.csv", ios::app);
+    double vxi = coords_.vx_;
+    double vyi = coords_.vy_;
     while(coords_.z_ < zfin){
         if(abs(coords_.z_)<1000.0){
-            h=0.1;
+            h = .1;
         }
-        else{
-            h=100.0;
+        else if(abs(coords_.z_) < 10000){
+            h = 300.0;
+        }
+        else {
+            h = 2000.0;
         }
         step(h);
         runsteps++;
+        ///Used to check if values are reasonable
         if(runsteps%1000 == 0){
-            cout << runsteps <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
+            // cout << runsteps <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << coords_.vz_ << endl;
+            // for when vz is acting strangely cout << coords_.vx_ << "  "  <<coords_.vy_ << "  " << coords_.vz_ << "  " << sqrt(1.0 - coords_.vx_*coords_.vx_ - coords_.vy_*coords_.vy_) << endl;
         }
-  //      if(runsteps%10 ==0){
-  //          fout<< coords_.x_ <<"," << coords_.z_<<endl;
-  //      }
+
+
+        /* Use for csv to view trajectory in x vs z
+        if(runsteps%10000 ==0){
+            fout<< coords_.x_ <<"," << coords_.z_<<endl;
+        }
+        */
+
         if(runsteps > 1000000){
             cout<<"took too many steps"<<endl;
             break;
         }
+
         if(pow(coords_.x_, 2) + pow(coords_.y_, 2) + pow(coords_.z_, 2) < 4*M_){
             cout<<"got too close"<<endl;
             break;
         }
-        //data << i << "," << coords_.t_ << "," << coords_.x_ << "," << coords_.y_ <<","<< coords_.z_<< endl;
     }
+    fout << pow( (pow( (coords_.x_ - xaim) , 2) + pow( (coords_.y_ - yaim) , 2)), .5) << "," << vxi << "," << vyi << endl;
     fout.close();
     cout << runsteps <<"  "<< coords_.t_ <<"  " << coords_.x_ <<"  " << coords_.y_ <<"  "<< coords_.z_ <<"  " << endl;
 }
